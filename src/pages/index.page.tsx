@@ -12,12 +12,13 @@ export default function IndexPage() {
       <div class="container-xxl p-3">
         <h1 class="fs-5 fw-semibold mb-3">Tools</h1>
         <ul class="list-unstyled">
-          <ListItem href="/base64-encode" text="Base64 Encode" />
-          <ListItem href="/base64-decode" text="Base64 Decode" />
-          <ListItem href="/compress-image" text="Image Compressor" />
+          <ListItem href="/base64-encoder" text="Base64 Encoder" />
+          <ListItem href="/base64-decoder" text="Base64 Decoder" />
+          <ListItem href="/image-compressor" text="Image Compressor" />
           <ListItem href="/lorem" text="Lorem Generator" />
           <ListItem href="/mock-data" text="Mock Data Generator" />
           <ListItem href="/qr-code-generator" text="QR Code Generator" />
+          <ListItem href="/uuid-generator" text="UUID Generator" />
         </ul>
       </div>
     </>

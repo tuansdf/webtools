@@ -7,16 +7,16 @@ const routes = [
     component: lazy(() => import("@/pages/index.page.tsx")),
   },
   {
-    path: "/base64-encode",
-    component: lazy(() => import("@/pages/base64-encode.page.tsx")),
+    path: "/base64-encoder",
+    component: lazy(() => import("@/pages/base64-encoder.page.tsx")),
   },
   {
-    path: "/base64-decode",
-    component: lazy(() => import("@/pages/base64-decode.page.tsx")),
+    path: "/base64-decoder",
+    component: lazy(() => import("@/pages/base64-decoder.page.tsx")),
   },
   {
-    path: "/compress-image",
-    component: lazy(() => import("@/pages/compress-image.page.tsx")),
+    path: "/image-compressor",
+    component: lazy(() => import("@/pages/image-compressor.page.tsx")),
   },
   {
     path: "/mock-data",
@@ -29,6 +29,10 @@ const routes = [
   {
     path: "/qr-code-generator",
     component: lazy(() => import("@/pages/qr-code-generator.page.tsx")),
+  },
+  {
+    path: "/uuid-generator",
+    component: lazy(() => import("@/pages/uuid-generator.page.tsx")),
   },
   {
     path: "/*",

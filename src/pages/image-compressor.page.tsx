@@ -25,7 +25,7 @@ import { clamp } from "@/utils/common.util.ts";
 import { downloadFile } from "@/utils/file.util.ts";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
 
-export default function CompressImagePage() {
+export default function ImageCompressorPage() {
   const [quality, setQuality] = createSignal<number>(DEFAULT_QUALITY);
   const [maxWidthOrHeight, setMaxWidthOrHeight] = createSignal<number>(DEFAULT_MAX_WIDTH_OR_HEIGHT);
   const [maxSize, setMaxSize] = createSignal<number>(DEFAULT_MAX_SIZE);
