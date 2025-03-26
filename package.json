@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && fico -i dist -e js -e css --override",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "@types/node": "^22.10.1",
     "@types/pako": "^2.0.3",
     "@types/qrcode": "^1.5.5",
+    "fico-cli": "^1.0.1",
     "postcss": "^8.4.49",
     "postcss-preset-env": "^10.1.1",
     "sass": "1.77.6",
