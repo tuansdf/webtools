@@ -7,10 +7,9 @@ import classes from "./index.page.module.scss";
 export default function IndexPage() {
   return (
     <>
-      <Header title="Boring" />
+      <Header title="WebTools" />
 
       <div class="container-xxl p-3">
-        <h1 class="fs-5 fw-semibold mb-3">Tools</h1>
         <ul class="list-unstyled">
           <ListItem href="/base64-encoder" text="Base64 Encoder" />
           <ListItem href="/base64-decoder" text="Base64 Decoder" />
