@@ -18,6 +18,7 @@ export default function IndexPage() {
           <ListItem href="/mock-data" text="Mock Data Generator" />
           <ListItem href="/qr-code-generator" text="QR Code Generator" />
           <ListItem href="/uuid-generator" text="UUID Generator" />
+          <ListItem href="/password-generator" text="Password Generator" />
         </ul>
       </div>
     </>

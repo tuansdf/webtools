@@ -35,6 +35,10 @@ const routes = [
     component: lazy(() => import("@/pages/uuid-generator.page.tsx")),
   },
   {
+    path: "/password-generator",
+    component: lazy(() => import("@/pages/password-generator.page.tsx")),
+  },
+  {
     path: "/*",
     component: () => <Navigate href="/" />,
   },
