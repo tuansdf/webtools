@@ -10,14 +10,14 @@ import {
   MIN_MAX_WIDTH_OR_HEIGHT,
   MIN_QUALITY,
 } from "@/features/compress-image/compress-image.constant.ts";
-import { COMPRESS_IMAGE_OPTIONS, COMPRESS_IMAGE_WORKER_PARAMS } from "@/features/compress-image/compress-image.type.ts";
+import { CompressImageOptions, CompressImageWorkerParams } from "@/features/compress-image/compress-image.type.ts";
 import CompressImageWorker from "@/features/compress-image/compress-image.worker.ts?worker";
 import { clamp } from "@/utils/common.util.ts";
 import imageCompression from "browser-image-compression";
 
 let worker: Worker | null = null;
 
-export const compressImagesWorker = async (request: COMPRESS_IMAGE_WORKER_PARAMS): Promise<File[]> => {
+export const compressImagesWorker = async (request: CompressImageWorkerParams): Promise<File[]> => {
   return new Promise((res) => {
     if (!worker) {
       worker = new CompressImageWorker();
@@ -46,7 +46,7 @@ const FILE_TYPE_TO_EXTENSION: Record<string, string> = {
   "image/jpeg": ".jpg",
 };
 
-export const compressImages = async (files: File[], options: COMPRESS_IMAGE_OPTIONS = {}) => {
+export const compressImages = async (files: File[], options: CompressImageOptions = {}) => {
   const promises: Promise<any>[] = [];
   for (let i = 0; i < files.length; i++) {
     promises.push(compressImage(files[i], options));
@@ -54,7 +54,7 @@ export const compressImages = async (files: File[], options: COMPRESS_IMAGE_OPTI
   return Promise.all(promises);
 };
 
-export const compressImage = async (file: File, options: COMPRESS_IMAGE_OPTIONS = {}): Promise<File> => {
+export const compressImage = async (file: File, options: CompressImageOptions = {}): Promise<File> => {
   if (!file.type.startsWith("image/")) return file;
   if (!options.fileType || !FILE_TYPE_TO_EXTENSION[options.fileType]) options.fileType = DEFAULT_FILE_TYPE;
   if (!options.quality) options.quality = DEFAULT_QUALITY;

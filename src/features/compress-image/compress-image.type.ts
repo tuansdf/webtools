@@ -1,10 +1,10 @@
-export type COMPRESS_IMAGE_OPTIONS = {
+export type CompressImageOptions = {
   fileType?: string;
   quality?: number;
   maxWidthOrHeight?: number;
   maxSize?: number;
 };
-export type COMPRESS_IMAGE_WORKER_PARAMS = {
+export type CompressImageWorkerParams = {
   files: File[];
-  options: COMPRESS_IMAGE_OPTIONS;
+  options: CompressImageOptions;
 };

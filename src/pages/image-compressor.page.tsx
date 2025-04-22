@@ -15,7 +15,7 @@ import {
   MIN_MAX_WIDTH_OR_HEIGHT,
   MIN_QUALITY,
 } from "@/features/compress-image/compress-image.constant.ts";
-import { COMPRESS_IMAGE_OPTIONS } from "@/features/compress-image/compress-image.type.ts";
+import { CompressImageOptions } from "@/features/compress-image/compress-image.type.ts";
 import {
   compressImagesWorker,
   initCompressImageWorker,
@@ -39,7 +39,7 @@ export default function ImageCompressorPage() {
       setIsLoading(true);
       await new Promise((r) => setTimeout(r, 100));
       const start = performance.now();
-      let compressOptions: COMPRESS_IMAGE_OPTIONS = {
+      let compressOptions: CompressImageOptions = {
         quality: quality(),
         maxWidthOrHeight: maxWidthOrHeight(),
         fileType: fileType(),
