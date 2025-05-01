@@ -2,9 +2,9 @@ import { cn } from "@/utils/classnames.ts";
 import { ComponentProps, createUniqueId, splitProps } from "solid-js";
 import classes from "./file-upload.module.scss";
 
-type Props = {
+interface Props extends ComponentProps<"input"> {
   onFiles: (files: File[] | null) => any | Promise<any>;
-} & ComponentProps<"input">;
+}
 
 export const FileUpload = (props: Props) => {
   const id = createUniqueId();

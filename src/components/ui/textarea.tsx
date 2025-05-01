@@ -1,12 +1,12 @@
 import { cn } from "@/utils/classnames.ts";
 import { ComponentProps, createUniqueId, Show, splitProps } from "solid-js";
 
-type Props = {
+interface Props extends ComponentProps<"textarea"> {
   letterCount?: number;
   maxLetterCount?: number;
   errorMessage?: string;
   label?: string;
-} & ComponentProps<"textarea">;
+}
 
 export const Textarea = (props: Props) => {
   const [local, others] = splitProps(props, ["class", "errorMessage", "letterCount", "maxLetterCount", "id", "label"]);

@@ -1,9 +1,9 @@
 import { cn } from "@/utils/classnames.ts";
 import { ComponentProps, createUniqueId, Show, splitProps } from "solid-js";
 
-type Props = {
+interface Props extends ComponentProps<"input"> {
   label?: string;
-} & ComponentProps<"input">;
+}
 
 export const Checkbox = (props: Props) => {
   const id = createUniqueId();

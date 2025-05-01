@@ -1,10 +1,10 @@
 import { cn } from "@/utils/classnames.ts";
 import { ComponentProps, createUniqueId, Show, splitProps } from "solid-js";
 
-type Props = {
+interface Props extends ComponentProps<"input"> {
   containerClass?: string;
   label?: string;
-} & ComponentProps<"input">;
+}
 
 export const Input = (props: Props) => {
   const [local, others] = splitProps(props, ["class", "id", "label", "containerClass"]);

@@ -1,11 +1,11 @@
 import { cn } from "@/utils/classnames.ts";
 import { ComponentProps, createUniqueId, JSXElement, Show, splitProps } from "solid-js";
 
-type Props = {
+interface Props extends ComponentProps<"select"> {
   containerClass?: string;
   label?: string;
   children?: JSXElement;
-} & ComponentProps<"select">;
+}
 
 export const Select = (props: Props) => {
   const [local, others] = splitProps(props, ["class", "id", "label", "containerClass"]);

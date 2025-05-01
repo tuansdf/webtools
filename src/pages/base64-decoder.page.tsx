@@ -33,7 +33,7 @@ export default function Base64DecoderPage() {
   const handleSubmitDebounced = debounce(handleSubmit);
 
   const shareableURL = () => {
-    return `${window.location.origin}${window.location.pathname}?url=${isUrlSafe()}&zlib=${withCompression()}#${input()}`;
+    return `${window.location.origin}${location.pathname}?url=${isUrlSafe()}&zlib=${withCompression()}#${input()}`;
   };
 
   onMount(() => {
