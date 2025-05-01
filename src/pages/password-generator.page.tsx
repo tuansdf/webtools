@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/header.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { CopyableInput } from "@/components/ui/copyable-input.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { clamp } from "@/utils/common.util.ts";
 import { customAlphabet } from "nanoid";
@@ -38,14 +39,12 @@ const generateByFeatures = (
 };
 
 export default function PasswordGeneratorPage() {
-  const [copied, setCopied] = createSignal<boolean>(false);
   const [output, setOutput] = createSignal<string>("");
   const [length, setLength] = createSignal<string>("8");
   const [uppercase, setUppercase] = createSignal<boolean>(true);
   const [lowercase, setLowercase] = createSignal<boolean>(true);
   const [numbers, setNumbers] = createSignal<boolean>(true);
   const [symbols, setSymbols] = createSignal<boolean>(true);
-  let copiedDeb: ReturnType<typeof setTimeout> | null = null;
 
   const handleSubmit = () => {
     try {
@@ -123,22 +122,7 @@ export default function PasswordGeneratorPage() {
           <div>
             <Button type="submit">Generate</Button>
           </div>
-          <Input
-            label={`Output${copied() ? " (copied)" : " (click to copy)"}`}
-            value={output()}
-            readOnly
-            onClick={async () => {
-              if (!output().length) return;
-              await navigator.clipboard.writeText(output());
-              if (copiedDeb) {
-                clearTimeout(copiedDeb);
-              }
-              setCopied(true);
-              copiedDeb = setTimeout(() => {
-                setCopied(false);
-              }, 1000);
-            }}
-          />
+          <CopyableInput label="Output" value={output()} readOnly />
         </form>
       </div>
     </>

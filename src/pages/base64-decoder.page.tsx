@@ -1,10 +1,11 @@
 import { Header } from "@/components/layout/header.tsx";
 import { Alert } from "@/components/ui/alert.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { CopyableInput } from "@/components/ui/copyable-input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { decodeBase64 } from "@/features/base64/base64.util.ts";
 import { debounce } from "@/utils/common.util.ts";
-import { useSearchParams } from "@solidjs/router";
+import { useLocation, useSearchParams } from "@solidjs/router";
 import { createSignal, onMount, Show } from "solid-js";
 
 export default function Base64DecoderPage() {
@@ -15,6 +16,7 @@ export default function Base64DecoderPage() {
   const [errorMessage, setErrorMessage] = createSignal<string>("");
   const [processingTime, setProcessingTime] = createSignal<number | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const handleSubmit = () => {
     try {
@@ -30,18 +32,12 @@ export default function Base64DecoderPage() {
 
   const handleSubmitDebounced = debounce(handleSubmit);
 
-  const handleIsUrlSafeChange = (input: boolean) => {
-    setIsUrlSafe(input);
-    setSearchParams({ url: input }, { replace: true });
-  };
-
-  const handleWithCompressionChange = (input: boolean) => {
-    setWithCompression(input);
-    setSearchParams({ zlib: input }, { replace: true });
+  const shareableURL = () => {
+    return `${window.location.origin}${window.location.pathname}?url=${isUrlSafe()}&zlib=${withCompression()}#${input()}`;
   };
 
   onMount(() => {
-    setInput((searchParams.q as string) || "");
+    setInput((location.hash.substring(1) as string) || "");
     setIsUrlSafe(searchParams.url === "true");
     setWithCompression(searchParams.zlib === "true");
     handleSubmit();
@@ -73,7 +69,9 @@ export default function Base64DecoderPage() {
               label="URL-safe"
               checked={isUrlSafe()}
               onInput={(e) => {
-                handleIsUrlSafeChange(e.currentTarget.checked);
+                const checked = e.currentTarget.checked;
+                setIsUrlSafe(checked);
+                setSearchParams({ url: checked }, { replace: true });
                 handleSubmitDebounced();
               }}
             />
@@ -81,12 +79,15 @@ export default function Base64DecoderPage() {
               label="Decompress with zlib after decoding"
               checked={withCompression()}
               onInput={(e) => {
-                handleWithCompressionChange(e.currentTarget.checked);
+                const checked = e.currentTarget.checked;
+                setWithCompression(checked);
+                setSearchParams({ zlib: checked }, { replace: true });
                 handleSubmitDebounced();
               }}
             />
           </div>
           <Textarea label="Output" value={output()} readOnly rows={12} letterCount={output().length} />
+          <CopyableInput label="Shareable URL" readOnly value={shareableURL()} />
           <Show when={processingTime() === 0 || processingTime()}>
             <div class="text-end font-monospace">done in {processingTime()}ms</div>
           </Show>
