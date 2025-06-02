@@ -19,6 +19,7 @@ export default function IndexPage() {
           <ListItem href="/qr-code-generator" text="QR Code Generator" />
           <ListItem href="/uuid-generator" text="UUID Generator" />
           <ListItem href="/password-generator" text="Password Generator" />
+          <ListItem href="/bulk-url-opener" text="Bulk URL Opener" />
         </ul>
       </div>
     </>
