@@ -15,6 +15,10 @@ const routes = [
     component: lazy(() => import("@/pages/base64-decoder.page.tsx")),
   },
   {
+    path: "/hex-to-utf8",
+    component: lazy(() => import("@/pages/hex-to-utf8.page.tsx")),
+  },
+  {
     path: "/image-compressor",
     component: lazy(() => import("@/pages/image-compressor.page.tsx")),
   },

@@ -13,6 +13,7 @@ export default function IndexPage() {
         <ul class="list-unstyled">
           <ListItem href="/base64-encoder" text="Base64 Encoder" />
           <ListItem href="/base64-decoder" text="Base64 Decoder" />
+          <ListItem href="/hex-to-utf8" text="Hex To UTF8 Converter" />
           <ListItem href="/image-compressor" text="Image Compressor" />
           <ListItem href="/lorem" text="Lorem Generator" />
           <ListItem href="/mock-data" text="Mock Data Generator" />
