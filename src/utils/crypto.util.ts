@@ -1,8 +1,8 @@
-import { compressText, decompressText } from "@/features/base64/compress-text.util.ts";
 import { xchacha20poly1305 } from "@noble/ciphers/chacha";
 import { bytesToHex, hexToBytes } from "@noble/ciphers/utils";
 import { randomBytes } from "@noble/ciphers/webcrypto";
 import { base64 } from "@scure/base";
+import Pako from "pako";
 
 const NONCE_BYTE_SIZE = 24;
 const NONCE_STR_SIZE = NONCE_BYTE_SIZE * 2;
@@ -12,7 +12,7 @@ export const encryptText = async (contentStr: string, passwordHex: string): Prom
     const nonce = randomBytes(NONCE_BYTE_SIZE);
     const password = hexToBytes(passwordHex);
     const cipher = xchacha20poly1305(password, nonce);
-    let content = compressText(contentStr);
+    let content = Pako.deflate(contentStr);
     let encrypted = cipher.encrypt(content);
     return bytesToHex(nonce) + base64.encode(encrypted);
   } catch (e) {
@@ -26,7 +26,7 @@ export const decryptText = async (content64: string, passwordHex: string): Promi
     const password = hexToBytes(passwordHex);
     const nonce = hexToBytes(content64.substring(0, NONCE_STR_SIZE));
     const cipher = xchacha20poly1305(password, nonce);
-    return decompressText(cipher.decrypt(content));
+    return Pako.inflate(cipher.decrypt(content), { to: "string" });
   } catch (e) {
     return "";
   }
