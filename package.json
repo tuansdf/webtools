@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && fico --input build --ext html --ext js --ext css --override true",
+    "build": "tsc -b && vite build && fico --input dist --ext html --ext js --ext css --override true",
     "preview": "vite preview"
   },
   "dependencies": {
