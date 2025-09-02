@@ -65,7 +65,7 @@ export default function LoremPage() {
           />
         </div>
 
-        <Textarea label="Output" value={output()} readOnly rows={12} letterCount={output().length} />
+        <Textarea label="Output" value={output()} readOnly rows={12} letterCount={output().length} copyable />
 
         <Button type="submit">Generate</Button>
 

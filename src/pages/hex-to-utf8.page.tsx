@@ -3,11 +3,13 @@ import { CopyableInput } from "@/components/ui/copyable-input.js";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { debounce } from "@/utils/common.util.ts";
 import { bytesToUtf8, hexToBytes } from "@noble/ciphers/utils";
+import { useLocation } from "@solidjs/router";
 import { createSignal, onMount } from "solid-js";
 
 export default function HexToUtf8Page() {
   const [input, setInput] = createSignal<string>("");
   const [output, setOutput] = createSignal<string>("");
+  const location = useLocation();
 
   const handleSubmit = () => {
     try {
@@ -43,7 +45,7 @@ export default function HexToUtf8Page() {
             rows={10}
             letterCount={input().length}
           />
-          <Textarea label="Output" value={output()} readOnly rows={10} letterCount={output().length} />
+          <Textarea label="Output" value={output()} readOnly rows={10} letterCount={output().length} copyable />
           <CopyableInput label="Share" readOnly value={shareableURL()} />
         </form>
       </div>

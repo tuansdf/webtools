@@ -94,6 +94,7 @@ export default function Base64DecoderPage() {
             readOnly
             rows={10}
             letterCount={output().length}
+            copyable
           />
           <Show when={processingTime() === 0 || processingTime()}>
             <div class="text-end font-monospace">done in {processingTime()}ms</div>
