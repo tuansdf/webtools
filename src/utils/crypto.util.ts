@@ -14,7 +14,7 @@ export const encryptText = async (contentStr: string, passwordHex: string): Prom
     const content = Pako.deflate(contentStr);
     const encrypted = cipher.encrypt(content);
     return bytesToHex(nonce) + base64.encode(encrypted);
-  } catch (e) {
+  } catch {
     return "";
   }
 };
@@ -26,7 +26,7 @@ export const decryptText = async (content64: string, passwordHex: string): Promi
     const nonce = hexToBytes(content64.substring(0, NONCE_STR_SIZE));
     const cipher = xchacha20poly1305(password, nonce);
     return Pako.inflate(cipher.decrypt(content), { to: "string" });
-  } catch (e) {
+  } catch {
     return "";
   }
 };

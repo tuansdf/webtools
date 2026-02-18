@@ -10,7 +10,12 @@ import type {
 const MAX_OBJECTS = 10_000;
 
 function keyToFn(key: string) {
-  return key?.split(".").reduce((acc, k) => acc[k], faker as Record<string, any>) as MockDataFn;
+  return (
+    key
+      ?.split(".")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .reduce((acc, k) => (acc as Record<string, any>)[k], faker as object) as MockDataFn
+  );
 }
 
 function requestToFnsObject(data: MockDataRequest): MockDataFns {

@@ -4,11 +4,12 @@ export const validateUrl = (input: string): boolean => {
     if (!input.startsWith("https://")) return false;
     new URL(input);
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = <TFn extends (...args: any[]) => any>(
   fn: TFn,
   ms: number = 200,

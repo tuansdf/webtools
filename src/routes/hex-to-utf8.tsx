@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ActionIcon, Container, CopyButton, Stack, Textarea, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { bytesToUtf8, hexToBytes } from "@noble/ciphers/utils.js";
@@ -8,7 +8,7 @@ import { CopyableInput } from "@/components/copyable-input.tsx";
 import { debounce } from "@/utils/common.util.ts";
 
 export default function HexToUtf8Page() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(() => window.location.hash.substring(1) || "");
   const [output, setOutput] = useState("");
   const location = useLocation();
 
@@ -19,20 +19,16 @@ export default function HexToUtf8Page() {
         return;
       }
       setOutput(bytesToUtf8(hexToBytes(input)));
-    } catch {}
+    } catch {
+      // conversion errors are silently ignored
+    }
   }, [input]);
 
   const handleSubmitDebounced = useMemo(() => debounce(handleSubmit), [handleSubmit]);
 
   const shareableURL = `${window.location.origin}${location.pathname}#${input}`;
 
-  useEffect(() => {
-    setInput(window.location.hash.substring(1) || "");
-  }, []);
-
-  useEffect(() => {
-    handleSubmit();
-  }, [handleSubmit]);
+  useMemo(() => handleSubmit(), [handleSubmit]);
 
   return (
     <Container size="xl" p="md">

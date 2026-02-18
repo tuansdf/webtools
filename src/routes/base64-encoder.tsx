@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   ActionIcon,
   Checkbox,
@@ -20,10 +20,7 @@ import { debounce } from "@/utils/common.util.ts";
 
 const MAX_LENGTH = 1000000;
 
-export const encode = (
-  input: string,
-  options: { url?: boolean; compression?: boolean } = {},
-): string => {
+const encode = (input: string, options: { url?: boolean; compression?: boolean } = {}): string => {
   const encodeFn = options.url ? base64urlnopad.encode : base64.encode;
   if (options.compression) {
     return encodeFn(Pako.deflate(input));
@@ -32,7 +29,9 @@ export const encode = (
 };
 
 export default function Base64EncoderPage() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(() =>
+    decodeURIComponent(window.location.hash.substring(1) || ""),
+  );
   const [output, setOutput] = useState("");
   const [processingTime, setProcessingTime] = useState<number | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,7 +49,9 @@ export default function Base64EncoderPage() {
       const start = performance.now();
       setOutput(encode(input, { url: isUrl, compression: isCompression }));
       setProcessingTime(performance.now() - start);
-    } catch {}
+    } catch {
+      // encoding errors are silently ignored
+    }
   }, [input, isUrl, isCompression]);
 
   const handleSubmitDebounced = useMemo(() => debounce(handleSubmit), [handleSubmit]);
@@ -58,13 +59,7 @@ export default function Base64EncoderPage() {
   const encoderUrl = `${window.location.origin}/base64-encoder${location.search}#${encodeURIComponent(input)}`;
   const decoderUrl = `${window.location.origin}/base64-decoder${location.search}#${encodeURIComponent(output)}`;
 
-  useEffect(() => {
-    setInput(decodeURIComponent(window.location.hash.substring(1) || ""));
-  }, []);
-
-  useEffect(() => {
-    handleSubmit();
-  }, [handleSubmit]);
+  useMemo(() => handleSubmit(), [handleSubmit]);
 
   return (
     <Container size="xl" p="md">

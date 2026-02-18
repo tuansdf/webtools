@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   ActionIcon,
   Alert,
@@ -21,10 +21,7 @@ import { debounce } from "@/utils/common.util.ts";
 
 const MAX_LENGTH = 1000000;
 
-export const decode = (
-  input: string,
-  options: { url?: boolean; compression?: boolean } = {},
-): string => {
+const decode = (input: string, options: { url?: boolean; compression?: boolean } = {}): string => {
   const decodeFn = options.url ? base64urlnopad.decode : base64.decode;
   return options.compression
     ? Pako.inflate(decodeFn(input), { to: "string" })
@@ -32,7 +29,9 @@ export const decode = (
 };
 
 export default function Base64DecoderPage() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(() =>
+    decodeURIComponent(window.location.hash.substring(1) || ""),
+  );
   const [output, setOutput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [processingTime, setProcessingTime] = useState<number | null>(null);
@@ -62,13 +61,7 @@ export default function Base64DecoderPage() {
   const decoderUrl = `${window.location.origin}/base64-decoder${location.search}#${encodeURIComponent(input)}`;
   const encoderUrl = `${window.location.origin}/base64-encoder${location.search}#${encodeURIComponent(output)}`;
 
-  useEffect(() => {
-    setInput(decodeURIComponent(window.location.hash.substring(1) || ""));
-  }, []);
-
-  useEffect(() => {
-    handleSubmit();
-  }, [handleSubmit]);
+  useMemo(() => handleSubmit(), [handleSubmit]);
 
   return (
     <Container size="xl" p="md">
