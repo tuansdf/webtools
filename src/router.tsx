@@ -43,6 +43,10 @@ const routes = [
     component: lazy(() => import("@/pages/password-generator.page.tsx")),
   },
   {
+    path: "/username-generator",
+    component: lazy(() => import("@/pages/username-generator.page.tsx")),
+  },
+  {
     path: "/bulk-url-opener",
     component: lazy(() => import("@/pages/bulk-url-opener.page.tsx")),
   },
