@@ -10,7 +10,10 @@ import {
   MIN_MAX_WIDTH_OR_HEIGHT,
   MIN_QUALITY,
 } from "@/features/compress-image/compress-image.constant.ts";
-import { CompressImageOptions, CompressImageWorkerParams } from "@/features/compress-image/compress-image.type.ts";
+import type {
+  CompressImageOptions,
+  CompressImageWorkerParams,
+} from "@/features/compress-image/compress-image.type.ts";
 import CompressImageWorker from "@/features/compress-image/compress-image.worker.ts?worker";
 import { clamp } from "@/utils/common.util.ts";
 import imageCompression from "browser-image-compression";
@@ -54,15 +57,24 @@ export const compressImages = async (files: File[], options: CompressImageOption
   return Promise.all(promises);
 };
 
-export const compressImage = async (file: File, options: CompressImageOptions = {}): Promise<File> => {
+export const compressImage = async (
+  file: File,
+  options: CompressImageOptions = {},
+): Promise<File> => {
   if (!file.type.startsWith("image/")) return file;
-  if (!options.fileType || !FILE_TYPE_TO_EXTENSION[options.fileType]) options.fileType = DEFAULT_FILE_TYPE;
+  if (!options.fileType || !FILE_TYPE_TO_EXTENSION[options.fileType])
+    options.fileType = DEFAULT_FILE_TYPE;
   if (!options.quality) options.quality = DEFAULT_QUALITY;
   else options.quality = clamp(options.quality, MIN_QUALITY, MAX_QUALITY);
   if (!options.maxSize) options.maxSize = DEFAULT_MAX_SIZE;
   else options.maxSize = clamp(options.maxSize, MIN_MAX_SIZE, MAX_MAX_SIZE);
   if (!options.maxWidthOrHeight) options.maxWidthOrHeight = DEFAULT_MAX_WIDTH_OR_HEIGHT;
-  else options.maxWidthOrHeight = clamp(options.maxWidthOrHeight, MIN_MAX_WIDTH_OR_HEIGHT, MAX_MAX_WIDTH_OR_HEIGHT);
+  else
+    options.maxWidthOrHeight = clamp(
+      options.maxWidthOrHeight,
+      MIN_MAX_WIDTH_OR_HEIGHT,
+      MAX_MAX_WIDTH_OR_HEIGHT,
+    );
 
   let compressed = await imageCompression(file, {
     maxWidthOrHeight: options.maxWidthOrHeight,

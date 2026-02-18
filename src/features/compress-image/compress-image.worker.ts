@@ -1,4 +1,4 @@
-import { CompressImageWorkerParams } from "@/features/compress-image/compress-image.type.ts";
+import type { CompressImageWorkerParams } from "@/features/compress-image/compress-image.type.ts";
 import { compressImages } from "@/features/compress-image/compress-image.util.ts";
 
 self.onmessage = async function (e) {

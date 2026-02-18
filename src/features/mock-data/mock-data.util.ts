@@ -1,4 +1,9 @@
-import { MockDataFn, MockDataFns, MockDataRequest, MockDataResult } from "@/features/mock-data/mock-data.type.ts";
+import type {
+  MockDataFn,
+  MockDataFns,
+  MockDataRequest,
+  MockDataResult,
+} from "@/features/mock-data/mock-data.type.ts";
 import MockDataWorker from "@/features/mock-data/mock-data.worker.ts?worker";
 import { faker } from "@faker-js/faker";
 

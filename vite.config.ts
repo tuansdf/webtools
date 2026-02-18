@@ -1,11 +1,13 @@
-import viteLegacyPlugin from "@vitejs/plugin-legacy";
+import react from "@vitejs/plugin-react";
+import path from "path";
 import { defineConfig } from "vite";
-import solid from "vite-plugin-solid";
-import tsconfigPaths from "vite-tsconfig-paths";
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [solid(), tsconfigPaths(), viteLegacyPlugin()],
-  worker: {
-    plugins: () => [tsconfigPaths()],
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
 });
