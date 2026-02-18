@@ -1,39 +1,13 @@
+import { faker } from "@faker-js/faker";
+
 import type {
   MockDataFn,
   MockDataFns,
   MockDataRequest,
   MockDataResult,
 } from "@/features/mock-data/mock-data.type.ts";
-import MockDataWorker from "@/features/mock-data/mock-data.worker.ts?worker";
-import { faker } from "@faker-js/faker";
 
 const MAX_OBJECTS = 10_000;
-
-let worker: Worker | null = null;
-
-export const generateMockDataJsonString = async (request: MockDataRequest): Promise<string> => {
-  return new Promise((res) => {
-    if (!worker) {
-      worker = new MockDataWorker();
-    }
-    worker.onmessage = (e) => {
-      res(e.data);
-    };
-    worker.onerror = () => {
-      res("[]");
-    };
-    worker.postMessage(request);
-  });
-};
-
-export const initMockDataWorker = () => {
-  worker = new MockDataWorker();
-};
-
-export const terminateMockDataWorker = () => {
-  worker?.terminate();
-  worker = null;
-};
 
 function keyToFn(key: string) {
   return key?.split(".").reduce((acc, k) => acc[k], faker as Record<string, any>) as MockDataFn;

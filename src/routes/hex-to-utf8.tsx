@@ -1,17 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  ActionIcon,
-  Container,
-  CopyButton,
-  Stack,
-  TextInput,
-  Textarea,
-  Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Container, CopyButton, Stack, Textarea, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { bytesToUtf8, hexToBytes } from "@noble/ciphers/utils.js";
 import { useLocation } from "react-router";
 
+import { CopyableInput } from "@/components/copyable-input.tsx";
 import { debounce } from "@/utils/common.util.ts";
 
 export default function HexToUtf8Page() {
@@ -75,26 +68,5 @@ export default function HexToUtf8Page() {
         <CopyableInput label="Share" value={shareableURL} />
       </Stack>
     </Container>
-  );
-}
-
-function CopyableInput({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    if (!value) return;
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
-  };
-
-  return (
-    <TextInput
-      label={`${label}${copied ? " (copied)" : " (click to copy)"}`}
-      value={value}
-      readOnly
-      onClick={handleCopy}
-      styles={{ input: { cursor: "pointer" } }}
-    />
   );
 }

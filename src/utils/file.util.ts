@@ -4,4 +4,5 @@ export const downloadFile = (file: File) => {
   anchorEl.href = url;
   anchorEl.setAttribute("download", file.name);
   anchorEl.click();
+  window.URL.revokeObjectURL(url);
 };

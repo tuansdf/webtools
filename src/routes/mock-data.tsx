@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Container, LoadingOverlay, Stack, Textarea } from "@mantine/core";
 
-import {
-  generateMockDataJsonString,
-  initMockDataWorker,
-  terminateMockDataWorker,
-} from "@/features/mock-data/mock-data.util.ts";
+import MockDataWorker from "@/features/mock-data/mock-data.worker.ts?worker";
+import { useWorker } from "@/hooks/use-worker.ts";
 import { debounce } from "@/utils/common.util.ts";
+
+import type { MockDataRequest } from "@/features/mock-data/mock-data.type.ts";
 
 const handleSubmitDebounced = debounce((_submit: () => void) => _submit(), 300);
 
@@ -14,25 +13,14 @@ export default function MockDataPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      initMockDataWorker();
-    }
-    return () => {
-      terminateMockDataWorker();
-    };
-  }, []);
+  const worker = useWorker<MockDataRequest, string>(() => new MockDataWorker());
 
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 100));
       if (!input) return;
       const req = JSON.parse(input);
-      const data = await generateMockDataJsonString(req);
+      const data = await worker.postMessage(req);
       setOutput(data);
     } catch (e) {
       console.error(e);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Grid,
@@ -24,14 +24,14 @@ import {
   MIN_MAX_WIDTH_OR_HEIGHT,
   MIN_QUALITY,
 } from "@/features/compress-image/compress-image.constant.ts";
-import {
-  compressImagesWorker,
-  initCompressImageWorker,
-  terminateCompressImageWorker,
-} from "@/features/compress-image/compress-image.util.ts";
+import CompressImageWorker from "@/features/compress-image/compress-image.worker.ts?worker";
+import { useWorker } from "@/hooks/use-worker.ts";
 import { downloadFile } from "@/utils/file.util.ts";
 
-import type { CompressImageOptions } from "@/features/compress-image/compress-image.type.ts";
+import type {
+  CompressImageOptions,
+  CompressImageWorkerParams,
+} from "@/features/compress-image/compress-image.type.ts";
 
 export default function ImageCompressorPage() {
   const [quality, setQuality] = useState(DEFAULT_QUALITY);
@@ -40,23 +40,12 @@ export default function ImageCompressorPage() {
   const [fileType, setFileType] = useState(DEFAULT_FILE_TYPE);
   const [isLoading, setIsLoading] = useState(false);
   const [processingTime, setProcessingTime] = useState<number | null>(null);
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      initCompressImageWorker();
-    }
-    return () => {
-      terminateCompressImageWorker();
-    };
-  }, []);
+  const worker = useWorker<CompressImageWorkerParams, File[]>(() => new CompressImageWorker());
 
   const handleCompressImages = async (files: File[]) => {
     try {
       if (!files?.length) return;
       setIsLoading(true);
-      await new Promise((r) => setTimeout(r, 100));
       const start = performance.now();
       const compressOptions: CompressImageOptions = {
         quality,
@@ -64,7 +53,7 @@ export default function ImageCompressorPage() {
         fileType,
         maxSize,
       };
-      const compressedFiles = await compressImagesWorker({ files, options: compressOptions });
+      const compressedFiles = await worker.postMessage({ files, options: compressOptions });
       compressedFiles.forEach((file) => {
         downloadFile(file);
       });

@@ -7,7 +7,6 @@ import {
   CopyButton,
   Stack,
   Text,
-  TextInput,
   Textarea,
   Tooltip,
 } from "@mantine/core";
@@ -17,6 +16,7 @@ import { base64, base64urlnopad } from "@scure/base";
 import { useLocation, useSearchParams } from "react-router";
 import Pako from "pako";
 
+import { CopyableInput } from "@/components/copyable-input.tsx";
 import { debounce } from "@/utils/common.util.ts";
 
 const MAX_LENGTH = 1000000;
@@ -144,26 +144,5 @@ export default function Base64DecoderPage() {
         )}
       </Stack>
     </Container>
-  );
-}
-
-function CopyableInput({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    if (!value) return;
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
-  };
-
-  return (
-    <TextInput
-      label={`${label}${copied ? " (copied)" : " (click to copy)"}`}
-      value={value}
-      readOnly
-      onClick={handleCopy}
-      styles={{ input: { cursor: "pointer" } }}
-    />
   );
 }

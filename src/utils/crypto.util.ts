@@ -1,6 +1,5 @@
 import { xchacha20poly1305 } from "@noble/ciphers/chacha.js";
-import { bytesToHex, hexToBytes } from "@noble/ciphers/utils.js";
-import { randomBytes } from "@noble/ciphers/webcrypto";
+import { bytesToHex, hexToBytes, randomBytes } from "@noble/ciphers/utils.js";
 import { base64 } from "@scure/base";
 import Pako from "pako";
 

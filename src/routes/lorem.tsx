@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   ActionIcon,
   Button,
@@ -14,36 +14,27 @@ import {
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 
 import { MAX_WORD_COUNT, MIN_WORD_COUNT } from "@/features/lorem/lorem.constant.ts";
-import {
-  generateLoremWordsWorker,
-  initLoremWorker,
-  terminateLoremWorker,
-} from "@/features/lorem/lorem.util.ts";
+import LoremWorker from "@/features/lorem/lorem.worker.ts?worker";
+import { useWorker } from "@/hooks/use-worker.ts";
 
 export default function LoremPage() {
   const [output, setOutput] = useState("");
   const [wordCount, setWordCount] = useState<number>(0);
   const [processingTime, setProcessingTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      initLoremWorker();
-    }
-    return () => {
-      terminateLoremWorker();
-    };
-  }, []);
+  const worker = useWorker<number, string>(() => new LoremWorker());
 
   const handleSubmit = async () => {
-    setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 100));
-    const start = performance.now();
-    setOutput(await generateLoremWordsWorker(wordCount));
-    setProcessingTime(performance.now() - start);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const start = performance.now();
+      setOutput(await worker.postMessage(wordCount));
+      setProcessingTime(performance.now() - start);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
