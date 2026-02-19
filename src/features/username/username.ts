@@ -1,5 +1,109 @@
-const CONSONANTS = "bcdfghjklmnprstvwxz";
-const VOWELS = "aeiou";
+const SIMPLE_ONSETS = [
+  "b",
+  "c",
+  "d",
+  "f",
+  "g",
+  "h",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "p",
+  "r",
+  "s",
+  "t",
+  "v",
+  "w",
+  "x",
+  "z",
+];
+
+const CLUSTER_ONSETS = [
+  "bl",
+  "br",
+  "cl",
+  "cr",
+  "dr",
+  "fl",
+  "fr",
+  "gl",
+  "gr",
+  "pl",
+  "pr",
+  "sc",
+  "sk",
+  "sl",
+  "sm",
+  "sn",
+  "sp",
+  "st",
+  "str",
+  "sw",
+  "tr",
+  "tw",
+  "qu",
+  "sh",
+  "ch",
+  "th",
+  "wh",
+];
+
+const VOWEL_CORES = [
+  // singles (weighted more heavily by repeating)
+  "a",
+  "e",
+  "i",
+  "o",
+  "u",
+  "a",
+  "e",
+  "i",
+  "o",
+  "u",
+  "a",
+  "e",
+  "o",
+  // diphthongs & digraphs
+  "ai",
+  "au",
+  "ea",
+  "ei",
+  "ia",
+  "io",
+  "ou",
+  "oo",
+  "ee",
+];
+
+const SIMPLE_CODAS = ["b", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "t", "x", "z"];
+
+const CLUSTER_CODAS = [
+  "ct",
+  "ft",
+  "lk",
+  "lt",
+  "mp",
+  "nd",
+  "ng",
+  "nk",
+  "nt",
+  "pt",
+  "rb",
+  "rd",
+  "rk",
+  "rm",
+  "rn",
+  "rp",
+  "rs",
+  "rt",
+  "sk",
+  "sp",
+  "st",
+];
+
+// --- Utility ---
 
 const randomIndex = (max: number): number => {
   const arr = new Uint32Array(1);
@@ -7,13 +111,67 @@ const randomIndex = (max: number): number => {
   return arr[0]! % max;
 };
 
-const randomChar = (chars: string): string => chars[randomIndex(chars.length)]!;
+const pick = <T>(items: T[]): T => items[randomIndex(items.length)]!;
 
+/**
+ * Generate a single syllable with configurable complexity.
+ *
+ * Structure: [onset] + vowel-core + [coda]
+ *
+ * @param allowClusterOnset  Allow multi-char onsets like "str", "ch"
+ * @param allowCoda          Allow a trailing consonant / cluster
+ * @param codaChance         0-1 probability of adding a coda when allowed
+ */
+const generateSyllable = (
+  allowClusterOnset: boolean,
+  allowCoda: boolean,
+  codaChance: number,
+): string => {
+  let syl = "";
+
+  // Onset (90 % chance to have one)
+  if (randomIndex(100) < 90) {
+    if (allowClusterOnset && randomIndex(100) < 30) {
+      syl += pick(CLUSTER_ONSETS);
+    } else {
+      syl += pick(SIMPLE_ONSETS);
+    }
+  }
+
+  // Vowel core (always present)
+  syl += pick(VOWEL_CORES);
+
+  // Coda
+  if (allowCoda && randomIndex(100) < codaChance * 100) {
+    if (randomIndex(100) < 25) {
+      syl += pick(CLUSTER_CODAS);
+    } else {
+      syl += pick(SIMPLE_CODAS);
+    }
+  }
+
+  return syl;
+};
+
+/**
+ * Build a pronounceable word from `count` syllables.
+ *
+ * Applies contextual rules:
+ *  - First syllable may use cluster onsets, rarely has a coda
+ *  - Middle syllables are simpler to keep flow smooth
+ *  - Last syllable may end with a coda for a strong finish
+ */
 const generateSyllables = (count: number): string => {
   let result = "";
   for (let i = 0; i < count; i++) {
-    result += randomChar(CONSONANTS);
-    result += randomChar(VOWELS);
+    const isFirst = i === 0;
+    const isLast = i === count - 1;
+
+    const allowCluster = isFirst || randomIndex(100) < 20;
+    const allowCoda = isLast || randomIndex(100) < 25;
+    const codaChance = isLast ? 0.5 : 0.2;
+
+    result += generateSyllable(allowCluster, allowCoda, codaChance);
   }
   return result;
 };
